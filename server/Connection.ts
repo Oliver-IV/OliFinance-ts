@@ -1,9 +1,12 @@
+import "reflect-metadata";
+import "dotenv/config";
 import { DataSource } from "typeorm";
 import Category from "./entitys/Category";
 import Expense from "./entitys/Expense";
 import Income from "./entitys/Income";
 import User from "./entitys/User";
 
+console.log(process.env.DB_HOST) ;
 export const connection = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST,

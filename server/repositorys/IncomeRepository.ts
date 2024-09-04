@@ -3,7 +3,7 @@ import { connection } from "../Connection";
 import Income from "../entitys/Income";
 import User from "../entitys/User";
 import { ServiceError } from "../errors/ServiceError";
-import IIncomeRepository from "../interfaces/IIncomeRepository";
+import IIncomeRepository from "../interfaces/repository/IIncomeRepository";
 
 export default class IncomeRepository implements IIncomeRepository {
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 to-white">
+<div class="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
+    <h2 class="mb-6 text-center text-3xl font-bold text-blue-600">Iniciar Sesión</h2>
+    <form class="space-y-6">
+        <div class="space-y-2">
+            <label for="email" class="text-blue-600">Correo Electrónico</label>
+            <input id="email" placeholder="correo@ejemplo.com" type="email" required
+                   class="w-full rounded-md border border-blue-200 p-2 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50">
+        </div>
+        <div class="space-y-2">
+            <label for="password" class="text-blue-600">Contraseña</label>
+            <div class="relative">
+                <input id="password" placeholder="••••••••" type="password" required
+                       class="w-full rounded-md border border-blue-200 p-2 pr-10 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50">
+                <button type="button" id="togglePassword"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500">
+                    <i class="lucide-eye h-5 w-5"></i>
+                </button>
+            </div>
+        </div>
+        <button 
+                id="btnLogin"
+                type="button"
+                class="w-full rounded-md bg-blue-600 p-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Iniciar Sesión
+        </button>
+    </form>
+    <p class="mt-4 text-center text-sm text-blue-600">
+        ¿No tienes una cuenta?
+        <a href="#" class="font-medium text-blue-600 hover:underline">Regístrate</a>
+    </p>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle eye icon
+        const eyeIcon = this.querySelector('i');
+        eyeIcon.classList.toggle('lucide-eye');
+        eyeIcon.classList.toggle('lucide-eye-off');
+    });
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/loginController.js" type="text/javascript"></script>
+</body>
+</html>

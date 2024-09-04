@@ -1,7 +1,7 @@
 import { connection } from "../Connection";
 import Category from "../entitys/Category";
 import { ServiceError } from "../errors/ServiceError";
-import ICategortRepository from "../interfaces/ICategoryRepository";
+import ICategortRepository from "../interfaces/repository/ICategoryRepository";
 
 export default class CategoryRepository implements ICategortRepository {
 

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OliFinance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body class="flex flex-col min-h-screen bg-blue-50">
+    <!-- Navigation bar -->
+    <header class="bg-blue-600 text-white p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">OliFinance</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="hover:text-blue-200 flex items-center"><i class="fas fa-home mr-1"></i>Inicio</a></li>
+                <li><a href="/menu/gastos" class="hover:text-blue-200 flex items-center"><i class="fas fa-credit-card mr-1"></i>Gastos</a></li>
+                <li><a href="#" class="hover:text-blue-200 flex items-center"><i class="fas fa-info-circle mr-1"></i>Acerca De</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-grow container mx-auto p-4">
+        <!-- Financial summary -->
+        <div class="bg-white rounded-lg shadow-md mb-6">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold">Resumen Financiero</h2>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-lg mb-2">Tu cartera</h3>
+                        <p class="text-2xl font-bold text-blue-600">$5,000</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-lg mb-2">Ingresos</h3>
+                        <p class="text-2xl font-bold text-green-600">$3,000</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-lg mb-2">Egresos</h3>
+                        <p class="text-2xl font-bold text-red-600">$1,200</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h3 class="font-semibold text-lg mb-2">Filtrar por semana</h3>
+                        <select class="w-full p-2 border rounded">
+                            <option value="this-week">Esta semana</option>
+                            <option value="last-week">Semana pasada</option>
+                            <option value="two-weeks-ago">Hace 2 semanas</option>
+                            <option value="four-weeks-ago">Hace 4 semanas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Income and Expense buttons -->
+        <div class="flex justify-center space-x-4 mb-6">
+            <button id="addIncomeBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-plus-circle mr-2"></i> Agregar Ingreso
+            </button>
+            <button id="addExpenseBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-minus-circle mr-2"></i> Agregar Gasto
+            </button>
+        </div>
+
+        <!-- Add Income Form (hidden by default) -->
+        <div id="addIncomeForm" class="bg-white rounded-lg shadow-md mb-6 hidden">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold">Agregar Ingreso</h2>
+            </div>
+            <div class="p-4 space-y-4">
+                <div>
+                    <label for="income-amount" class="block text-sm font-medium text-gray-700">Monto</label>
+                    <input id="income-amount" type="number" placeholder="Ingrese el monto" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+                <button id="addIncomeSubmit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Aceptar</button>
+            </div>
+        </div>
+
+        <!-- Add Expense Form (hidden by default) -->
+        <div id="addExpenseForm" class="bg-white rounded-lg shadow-md mb-6 hidden">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold">Agregar Gasto - Paso <span id="expenseStep">1</span> de 4</h2>
+            </div>
+            <div class="p-4 space-y-4">
+                <!-- Step 1 -->
+                <div id="expenseStep1" class="space-y-4">
+                    <label for="expense-category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                    <select id="expense-category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="">Seleccionar categoría</option>
+                        <option value="hogar">Hogar</option>
+                        <option value="mascota">Mascota</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="new">Agregar nueva categoría</option>
+                    </select>
+                    <div id="newCategoryInput" class="hidden">
+                        <label for="new-category" class="block text-sm font-medium text-gray-700">Nueva Categoría</label>
+                        <input id="new-category" type="text" placeholder="Ingrese nueva categoría" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <button id="saveNewCategory" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Guardar</button>
+                    </div>
+                    <button id="nextStep1" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Siguiente</button>
+                </div>
+                <!-- Step 2 -->
+                <div id="expenseStep2" class="space-y-4 hidden">
+                    <label for="expense-name" class="block text-sm font-medium text-gray-700">Nombre del gasto</label>
+                    <input id="expense-name" type="text" placeholder="Ingrese el nombre del gasto" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <button id="nextStep2" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Siguiente</button>
+                </div>
+                <!-- Step 3 -->
+                <div id="expenseStep3" class="space-y-4 hidden">
+                    <label for="expense-amount" class="block text-sm font-medium text-gray-700">Monto</label>
+                    <input id="expense-amount" type="number" placeholder="Ingrese el monto" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <button id="nextStep3" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Siguiente</button>
+                </div>
+                <!-- Step 4 -->
+                <div id="expenseStep4" class="space-y-4 hidden">
+                    <label for="expense-note" class="block text-sm font-medium text-gray-700">Nota</label>
+                    <input id="expense-note" type="text" placeholder="Ingrese una nota (opcional)" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <button id="finishExpense" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Finalizar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense by Category Chart -->
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="p-4 border-b">
+                <h2 class="text-xl font-semibold">Gastos por Categoría</h2>
+            </div>
+            <div class="p-4">
+                <div class="mb-4">
+                    <select id="chartPeriod" class="w-full p-2 border rounded">
+                        <option value="this-week">Esta semana</option>
+                        <option value="last-week">Semana pasada</option>
+                        <option value="two-weeks-ago">Hace 2 semanas</option>
+                        <option value="four-weeks-ago">Hace 4 semanas</option>
+                    </select>
+                </div>
+                <div class="w-full max-w-md mx-auto"> <!-- Added container with max width -->
+                    <canvas id="expenseChart"></canvas> <!-- Removed width and height attributes -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>Derechos reservados Oliver Inzunza 2024-2025</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript to handle interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const addIncomeBtn = document.getElementById('addIncomeBtn');
+            const addExpenseBtn = document.getElementById('addExpenseBtn');
+            const addIncomeForm = document.getElementById('addIncomeForm');
+            const addExpenseForm = document.getElementById('addExpenseForm');
+            const expenseCategory = document.getElementById('expense-category');
+            const newCategoryInput = document.getElementById('newCategoryInput');
+            const expenseStepDisplay = document.getElementById('expenseStep');
+            let currentExpenseStep = 1;
+
+            // Toggle income form
+            addIncomeBtn.addEventListener('click', () => {
+                addIncomeForm.classList.toggle('hidden');
+                addExpenseForm.classList.add('hidden');
+            });
+
+            // Toggle expense form
+            addExpenseBtn.addEventListener('click', () => {
+                addExpenseForm.classList.toggle('hidden');
+                addIncomeForm.classList.add('hidden');
+                resetExpenseForm();
+            });
+
+            // Handle expense category selection
+            expenseCategory.addEventListener('change', (e) => {
+                if (e.target.value === 'new') {
+                    newCategoryInput.classList.remove('hidden');
+                } else {
+                    newCategoryInput.classList.add('hidden');
+                }
+            });
+
+            // Handle expense form steps
+            document.querySelectorAll('[id^="nextStep"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.getElementById(`expenseStep${currentExpenseStep}`).classList.add('hidden');
+                    currentExpenseStep++;
+                    document.getElementById(`expenseStep${currentExpenseStep}`).classList.remove('hidden');
+                    expenseStepDisplay.textContent = currentExpenseStep;
+                });
+            });
+
+            // Reset expense form
+            function resetExpenseForm() {
+                currentExpenseStep = 1;
+                expenseStepDisplay.textContent = currentExpenseStep;
+                document.querySelectorAll('[id^="expenseStep"]').forEach(step => {
+                    step.classList.add('hidden');
+                });
+                document.getElementById('expenseStep1').classList.remove('hidden');
+            }
+
+            // Initialize and update chart
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const expenseChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Hogar', 'Mascota', 'Transporte', 'Comida'],
+                    datasets: [{
+                        data: [400, 300, 300, 200],
+                        backgroundColor: ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 10,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 10,
+                            right: 10,
+                            top: 0,
+                            bottom: 0
+                        }
+                    }
+                }
+            });
+
+            // Update chart when period changes
+            document.getElementById('chartPeriod').addEventListener('change', function() {
+                // Here you would typically fetch new data based on the selected period
+                // For this example, we'll just update with random data
+                const newData = [
+                    Math.floor(Math.random() * 500),
+                    Math.floor(Math.random() * 500),
+                    Math.floor(Math.random() * 500),
+                    Math.floor(Math.random() * 500)
+                ];
+                expenseChart.data.datasets[0].data = newData;
+                expenseChart.update();
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/menuController.js" type="text/javascript"></script>
+</body>
+</html>

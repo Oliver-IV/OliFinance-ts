@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "tsnode": "ts-node test.ts",
-    "server": "ts-node server.ts"
+    "tsnode": "ts-node ./server/test.ts",
+    "server": "ts-node ./server/server.ts"
   },
   "keywords": [],
   "author": "Oliver Valle",
@@ -13,6 +13,8 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mysql2": "^3.11.0",
     "reflect-metadata": "^0.2.2",

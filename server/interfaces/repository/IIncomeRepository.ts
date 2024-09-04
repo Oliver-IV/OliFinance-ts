@@ -1,4 +1,4 @@
-import Income from "../entitys/Income";
+import Income from "../../entitys/Income";
 
 export default interface IIncomeRepository {
 

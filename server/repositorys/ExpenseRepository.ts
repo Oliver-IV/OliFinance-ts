@@ -2,7 +2,7 @@ import { Between } from "typeorm";
 import { connection } from "../Connection";
 import Expense from "../entitys/Expense";
 import { ServiceError } from "../errors/ServiceError";
-import IExpenseRepository from "../interfaces/IExpenseRepository";
+import IExpenseRepository from "../interfaces/repository/IExpenseRepository";
 
 export default class ExpenseRepository implements IExpenseRepository {
 

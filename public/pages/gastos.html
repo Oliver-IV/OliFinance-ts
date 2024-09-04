@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OliFinance - Gastos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen bg-white">
+    <header class="bg-blue-600 text-white p-4">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">OliFinance</h1>
+            <ul class="flex space-x-4">
+                <li><a href="/menu" class="hover:text-blue-200 flex items-center"><i class="fas fa-home mr-1"></i>Inicio</a></li>
+                <li><a href="#" class="hover:text-blue-200 flex items-center"><i class="fas fa-credit-card mr-1"></i>Gastos</a></li>
+                <li><a href="#" class="hover:text-blue-200 flex items-center"><i class="fas fa-info-circle mr-1"></i>Acerca De</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="flex-grow container mx-auto mt-8 px-4">
+        <h2 class="text-2xl font-bold text-blue-600 mb-6">Gastos</h2>
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center">
+                <i class="fas fa-calendar text-blue-600 mr-2"></i>
+                <input 
+                    type="date" 
+                    id="dateInput"
+                    class="border-blue-300 focus:border-blue-500 rounded-md p-2"
+                >
+            </div>
+            <select 
+                id="categorySelect"
+                class="w-[180px] border-blue-300 focus:border-blue-500 rounded-md p-2"
+            >
+                <option value="Todas">Todas</option>
+                <option value="Alimentación">Alimentación</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Entretenimiento">Entretenimiento</option>
+                <option value="Transporte">Transporte</option>
+            </select>
+        </div>
+        <table class="min-w-full">
+            <thead>
+                <tr>
+                    <th class="text-left text-blue-600 py-2">Nombre de gasto</th>
+                    <th class="text-left text-blue-600 py-2">Categoría</th>
+                    <th class="text-left text-blue-600 py-2">Nota</th>
+                    <th class="text-right text-blue-600 py-2">Monto</th>
+                </tr>
+            </thead>
+            <tbody id="expensesTableBody">
+                <!-- Expenses will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        const expenses = [
+            { id: 1, name: 'Compra de comestibles', category: 'Alimentación', note: 'Compra semanal', amount: 150.00 },
+            { id: 2, name: 'Factura de electricidad', category: 'Servicios', note: 'Mes de junio', amount: 80.50 },
+            { id: 3, name: 'Cena en restaurante', category: 'Entretenimiento', note: 'Salida con amigos', amount: 65.75 },
+            { id: 4, name: 'Gasolina', category: 'Transporte', note: 'Llenado del tanque', amount: 45.00 },
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('dateInput');
+            const categorySelect = document.getElementById('categorySelect');
+            const expensesTableBody = document.getElementById('expensesTableBody');
+
+            // Set initial date
+            dateInput.value = new Date().toISOString().split('T')[0];
+
+            function renderExpenses(filteredExpenses = expenses) {
+                expensesTableBody.innerHTML = '';
+                filteredExpenses.forEach(expense => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="py-2">${expense.name}</td>
+                        <td class="py-2">${expense.category}</td>
+                        <td class="py-2">${expense.note}</td>
+                        <td class="text-right py-2">$${expense.amount.toFixed(2)}</td>
+                    `;
+                    expensesTableBody.appendChild(row);
+                });
+            }
+
+            function filterExpenses() {
+                const selectedCategory = categorySelect.value;
+                const filteredExpenses = selectedCategory === 'Todas'
+                    ? expenses
+                    : expenses.filter(expense => expense.category === selectedCategory);
+                renderExpenses(filteredExpenses);
+            }
+
+            // Initial render
+            renderExpenses();
+
+            // Event listeners
+            dateInput.addEventListener('change', function() {
+                // Here you would typically fetch new data based on the selected date
+                // For this example, we'll just re-render the existing expenses
+                renderExpenses();
+            });
+
+            categorySelect.addEventListener('change', filterExpenses);
+        });
+    </script>
+</body>
+</html>

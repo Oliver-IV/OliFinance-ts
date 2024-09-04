@@ -1,4 +1,4 @@
-import Category from "../entitys/Category";
+import Category from "../../entitys/Category";
 
 
 export default interface ICategortRepository {

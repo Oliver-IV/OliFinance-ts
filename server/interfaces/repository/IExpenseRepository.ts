@@ -1,4 +1,4 @@
-import Expense from "../entitys/Expense";
+import Expense from "../../entitys/Expense";
 
 export default interface IExpenseRepository {
 

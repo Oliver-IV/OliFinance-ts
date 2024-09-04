@@ -24,22 +24,22 @@ export default class User {
     @Column({name: "wallet"})
     wallet : number ;
 
-    @OneToMany(() => Expense, expense => expense.user, {cascade: true})
+    @OneToMany(() => Expense, expense => expense.user)
     expenses ?: Expense[] ;
 
-    @OneToMany(() => Income, income => income.user, {cascade: true})
+    @OneToMany(() => Income, income => income.user)
     incomes ?: Income[] ;
 
-    @ManyToMany(() => Category, {cascade: true})
+    @ManyToMany(() => Category)
     @JoinTable({
         name: 'user_categories',
         joinColumn: {
             name: 'id_user',
-            referencedColumnName: 'id_user',
+            referencedColumnName: 'id',
         },
         inverseJoinColumn: {
             name: 'id_category',
-            referencedColumnName: 'id_category',
+            referencedColumnName: 'id',
         },
     })
     categories : Category[] ;
