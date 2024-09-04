@@ -7,13 +7,20 @@ export default class Income {
     @PrimaryGeneratedColumn({name: "id_income"})
     id ?: bigint ;
 
-    @Column({name: "amount"})
+    @Column({name: "amount", nullable: false})
     amount : number ;
 
-    @Column({name: "date"})
+    @Column({name: "date", nullable: false})
     date : Date ;
 
     @ManyToOne(() => User, user => user.incomes)
-    user : User ;
+    user ?: User ;
+
+    constructor(date:Date, amount:number, user?:User, id?:bigint) {
+        this.date = date ;
+        this.amount = amount ;
+        this.user = user ;
+        this.id = id ;
+    }
 
 }

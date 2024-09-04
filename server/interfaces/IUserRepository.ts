@@ -4,6 +4,6 @@ export default interface IUserRepository {
     
     addUser(user:User):User ;
 
-    findUserByEmail(email:string) ;
+    findUserByEmail(email:string):User ;
 
 }
