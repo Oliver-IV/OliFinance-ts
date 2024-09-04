@@ -3,10 +3,10 @@ import Category from "../entitys/Category";
 
 export default interface ICategortRepository {
 
-    addCategoryForUser(email:string, category:Category):Category ;
+    addCategoryForUser(category:Category):Promise<Category> ;
 
-    removeCategory(category:Category):Category ;
+    removeCategory(category:Category):Promise<Category> ;
 
-    findCategory(category:Category):Category ;
+    findCategoryByName(name:string):Promise<Category> ;
 
 }

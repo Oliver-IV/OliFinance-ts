@@ -8,22 +8,22 @@ export default class Expense {
     @PrimaryGeneratedColumn({name: "id_expense"})
     id ?: bigint ;
 
-    @Column({name: "amount"})
+    @Column({name: "amount", nullable: false})
     amount : number ;
 
-    @Column({name: "date"})
+    @Column({name: "date", nullable: false})
     date : Date ;
 
-    @Column({name: "title"})
+    @Column({name: "title", nullable: false})
     title : string ;
 
-    @Column({name: "note"})
+    @Column({name: "note", nullable: false})
     note : string ;
 
     @ManyToOne(() => Category)
     category : Category ;
 
-    @ManyToOne(() => User, user => user.expenses)
+    @ManyToOne(() => User, user => user.expenses, {cascade: true})
     user ?: User ;
 
     constructor(date:Date, amount:number, title:string, note:string, category:Category, user?:User, id?:bigint) {

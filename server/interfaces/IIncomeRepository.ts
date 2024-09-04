@@ -2,8 +2,8 @@ import Income from "../entitys/Income";
 
 export default interface IIncomeRepository {
 
-    addIncome(email:string, expense:Income):Income ;
+    addIncome(income:Income):Promise<Income> ;
 
-    findIncomes(start:Date, end:Date):Income[] ;
+    findIncomes(start:Date, end:Date):Promise<Income[]> ;
 
 }

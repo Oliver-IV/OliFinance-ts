@@ -2,8 +2,8 @@ import Expense from "../entitys/Expense";
 
 export default interface IExpenseRepository {
 
-    addExpense(email:string, expense:Expense):Expense ;
+    addExpense(expense:Expense):Promise<Expense> ;
 
-    findExpenses(start:Date, end:Date):Expense[] ;
+    findExpenses(start:Date, end:Date):Promise<Expense[]> ;
 
 }

@@ -9,16 +9,16 @@ export default class User {
     @PrimaryGeneratedColumn({name: "id_user"})
     id ?: bigint ;
 
-    @Column({name: "email"})
+    @Column({name: "email", nullable: false, unique: true})
     email : string ;
 
-    @Column({name: "password"})
+    @Column({name: "password", nullable: false})
     password : string ;
 
-    @Column({name: "name"})
+    @Column({name: "name", nullable: false})
     name : string ;
 
-    @Column({name: "last_name"})
+    @Column({name: "last_name", nullable: false})
     last_name : string ;
 
     @Column({name: "wallet"})
