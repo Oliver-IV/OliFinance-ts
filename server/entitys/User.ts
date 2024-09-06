@@ -24,13 +24,13 @@ export default class User {
     @Column({name: "wallet"})
     wallet : number ;
 
-    @OneToMany(() => Expense, expense => expense.user)
-    expenses ?: Expense[] ;
+    // @OneToMany(() => Expense, expense => expense.user)
+    // expenses ?: Expense[] ;
 
-    @OneToMany(() => Income, income => income.user)
-    incomes ?: Income[] ;
+    // @OneToMany(() => Income, income => income.user)
+    // incomes ?: Income[] ;
 
-    @ManyToMany(() => Category)
+    @ManyToMany(() => Category, {cascade: true})
     @JoinTable({
         name: 'user_categories',
         joinColumn: {
@@ -42,16 +42,27 @@ export default class User {
             referencedColumnName: 'id',
         },
     })
-    categories : Category[] ;
+    categories ?: Category[] ;
 
-    constructor(email:string, password:string, name:string, last_name:string, wallet?:number, expenses?:Expense[], incomes?:Income[], id?:bigint) {
+    // constructor(email:string, password:string, name:string, last_name:string, wallet?:number, expenses?:Expense[], incomes?:Income[], categories?:Category[], id?:bigint) {
+    //     this.email = email ;
+    //     this.password = password ;
+    //     this.name = name ;
+    //     this.last_name = last_name ;
+    //     this.wallet = wallet || 0;
+    //     this.expenses = expenses;
+    //     this.incomes = incomes
+    //     this.categories = categories ;
+    //     this.id = id ;
+    // }
+
+    constructor(email:string, password:string, name:string, last_name:string, wallet?:number, categories?:Category[], id?:bigint) {
         this.email = email ;
         this.password = password ;
         this.name = name ;
         this.last_name = last_name ;
-        this.wallet = wallet || 0;
-        this.expenses = expenses;
-        this.incomes = incomes
+        this.wallet = wallet || 0 ;
+        this.categories = categories ;
+        this.id = id ;
     }
-
 }

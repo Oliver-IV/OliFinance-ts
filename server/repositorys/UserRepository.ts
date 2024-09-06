@@ -1,4 +1,4 @@
-import { connection } from "../Connection";
+import { connection } from "../connection";
 import User from "../entitys/User";
 import { RepositoryError } from "../errors/RepositoryError";
 import IUserRepository from "../interfaces/repository/IUserRepository";
@@ -8,7 +8,7 @@ export default class UserRepository implements IUserRepository {
     constructor() {
         this.initializeConnection() ;
     }
-
+    
     private async initializeConnection() {
         if(!connection.isInitialized) {
             await connection.initialize();
@@ -34,13 +34,29 @@ export default class UserRepository implements IUserRepository {
         }
     }
 
+    async updateUser(user: User): Promise<void> {
+        try {
+            const repoUsers = connection.getRepository(User) ;
+            
+           if(user) {
+                await repoUsers.save(user) ;
+           }
+
+        } catch (error) {
+            throw new RepositoryError("There's an error with the connecion...") ;
+        }
+    }
+
     async findUserByEmail(email: string): Promise<User | null> {
         try {
             const repoUsers = connection.getRepository(User) ;
 
-            const user = await repoUsers.findOneBy({
-                email: email
-            }) ;
+            const user = await repoUsers.findOne(
+                {
+                    where: { email: email },
+                    relations: ["categories"]
+                }
+            ) ;
 
             return user ;
         } catch (error) {

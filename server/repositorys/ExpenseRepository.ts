@@ -1,8 +1,9 @@
 import { Between } from "typeorm";
-import { connection } from "../Connection";
+import { connection } from "../connection";
 import Expense from "../entitys/Expense";
 import { ServiceError } from "../errors/ServiceError";
 import IExpenseRepository from "../interfaces/repository/IExpenseRepository";
+import User from "../entitys/User";
 
 export default class ExpenseRepository implements IExpenseRepository {
 
@@ -26,14 +27,16 @@ export default class ExpenseRepository implements IExpenseRepository {
         }
     }
     
-    async findExpenses(start: Date, end: Date): Promise<Expense[]> {
+    async findExpenses(user:User, start: Date, end: Date): Promise<Expense[]> {
         try {
             const repoExpenses = connection.getRepository(Expense) ;
 
             const expenses = await repoExpenses.find({
                 where: {
-                    date: Between(start, end) 
-                }
+                    date: Between(start, end),
+                    user: user 
+                },
+                relations: ["user", "category"]
             }) ;
 
             if(expenses != null) {

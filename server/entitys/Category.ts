@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import User from "./User";
 
 @Entity({name: "category"})
 export default class Category {
@@ -9,7 +10,7 @@ export default class Category {
     @Column({name: "name", nullable: false, unique: true})
     name : string ;
 
-    constructor(name:string, id?:bigint) {
+    constructor(name:string, user?:User, id?:bigint) {
         this.id = id ;
         this.name = name ;
     }

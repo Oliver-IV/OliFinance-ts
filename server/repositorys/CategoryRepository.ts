@@ -1,4 +1,4 @@
-import { connection } from "../Connection";
+import { connection } from "../connection";
 import Category from "../entitys/Category";
 import { ServiceError } from "../errors/ServiceError";
 import ICategortRepository from "../interfaces/repository/ICategoryRepository";
@@ -15,12 +15,13 @@ export default class CategoryRepository implements ICategortRepository {
         }
     }
 
-    async addCategoryForUser(category: Category): Promise<Category> {
+    async addCategory(category: Category): Promise<Category> {
         try {
             const repoCategories =  connection.getRepository(Category) ;
 
             return await repoCategories.save(category) ;
         } catch (error) {
+            console.log(error) ;
             throw new ServiceError("There's an error with the connection...") ;
         }
     }
