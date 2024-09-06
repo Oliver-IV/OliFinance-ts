@@ -5,6 +5,6 @@ export default interface IIncomeRepository {
 
     addIncome(income:Income):Promise<Income> ;
 
-    findIncomes(user:User, start:Date, end:Date):Promise<Income[]> ;
+    findIncomes(user:User, start:Date, end:Date):Promise<Income[] | null> ;
 
 }

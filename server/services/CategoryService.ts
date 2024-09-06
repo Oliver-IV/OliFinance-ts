@@ -3,13 +3,13 @@ import ICategoryService from "../interfaces/service/ICategoryService";
 
 export default class CategoryService implements ICategoryService {
 
-    addCategoryForUser(category: CategoryDTO): Promise<CategoryDTO> {
+    addCategoryForUser(email: string, category: CategoryDTO): Promise<CategoryDTO> {
         throw new Error("Method not implemented.");
     }
-    removeCategory(category: CategoryDTO): Promise<CategoryDTO> {
+    removeCategory(email: string, category: CategoryDTO): Promise<CategoryDTO> {
         throw new Error("Method not implemented.");
     }
-    findCategoryByName(name: string): Promise<CategoryDTO> {
+    findCategoryByName(name: string): Promise<CategoryDTO | null> {
         throw new Error("Method not implemented.");
     }
 

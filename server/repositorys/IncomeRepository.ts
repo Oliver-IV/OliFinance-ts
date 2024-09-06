@@ -2,8 +2,8 @@ import { Between } from "typeorm";
 import { connection } from "../connection";
 import Income from "../entitys/Income";
 import User from "../entitys/User";
-import { ServiceError } from "../errors/ServiceError";
 import IIncomeRepository from "../interfaces/repository/IIncomeRepository";
+import { RepositoryError } from "../errors/RepositoryError";
 
 export default class IncomeRepository implements IIncomeRepository {
 
@@ -23,11 +23,11 @@ export default class IncomeRepository implements IIncomeRepository {
 
             return await repoIncomes.save(income) ;
         } catch (error) {
-            throw new ServiceError("There's an error with the connection...") ;
+            throw new RepositoryError("There's an error with the connection...") ;
         }
     }
     
-    async findIncomes(user:User, start: Date, end: Date): Promise<Income[]> {
+    async findIncomes(user:User, start: Date, end: Date): Promise<Income[] | null> {
         try {
             const repoIncomes = connection.getRepository(Income) ;
 
@@ -39,16 +39,9 @@ export default class IncomeRepository implements IIncomeRepository {
                 relations: ["user"]
             }) ;
 
-            if(incomes != null) {
-                return incomes ;
-            }
-
-            throw new ServiceError("There are no incomes") ;
+            return incomes ;
         } catch (error) {
-            if(error instanceof ServiceError) {
-                throw error ;
-            }
-            throw new ServiceError("There's an error with the connection...") ;
+            throw new RepositoryError("There's an error with the connection...") ;
         }
     }
 

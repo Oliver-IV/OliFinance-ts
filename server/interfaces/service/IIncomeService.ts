@@ -2,8 +2,8 @@ import IncomeDTO from "../../dtos/IncomeDTO";
 
 export default interface IIncomeService {
 
-    addIncome(income:IncomeDTO):Promise<IncomeDTO> ;
+    addIncome(email:string, income:IncomeDTO):Promise<IncomeDTO> ;
 
-    findIncomes(start:Date, end:Date):Promise<IncomeDTO[]> ;
+    findIncomes(email: string, start:Date, end:Date):Promise<IncomeDTO[] | null> ;
 
 }

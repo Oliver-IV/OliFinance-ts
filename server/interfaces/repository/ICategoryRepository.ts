@@ -7,6 +7,6 @@ export default interface ICategortRepository {
 
     removeCategory(category:Category):Promise<Category> ;
 
-    findCategoryByName(name:string):Promise<Category> ;
+    findCategoryByName(name:string):Promise<Category | null> ;
 
 }

@@ -10,7 +10,7 @@ export default class Category {
     @Column({name: "name", nullable: false, unique: true})
     name : string ;
 
-    constructor(name:string, user?:User, id?:bigint) {
+    constructor(name:string, id?:bigint) {
         this.id = id ;
         this.name = name ;
     }

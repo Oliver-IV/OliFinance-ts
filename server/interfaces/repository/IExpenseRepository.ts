@@ -5,6 +5,6 @@ export default interface IExpenseRepository {
 
     addExpense(expense:Expense):Promise<Expense> ;
 
-    findExpenses(user:User, start:Date, end:Date):Promise<Expense[]> ;
+    findExpenses(user:User, start:Date, end:Date):Promise<Expense[] | null> ;
 
 }

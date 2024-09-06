@@ -1,8 +1,8 @@
-const selectorCategoriaGasto = document.getElementById("expense-category") ;
-const nombreGasto = document.getElementById("expense-name") ;
-const montoGasto = document.getElementById("expense-amount") ;
-const notaGasto = document.getElementById("expense-note") ;
-const btnAgregarGasto = document.getElementById("finishExpense") ;
+const addExpenseCategory = document.getElementById("expense-category") ;
+const expenseName = document.getElementById("expense-name") ;
+const expenseMount = document.getElementById("expense-amount") ;
+const expenseNote = document.getElementById("expense-note") ;
+const btnAddExpense = document.getElementById("finishExpense") ;
 
 function agregarGasto() {
 
@@ -13,10 +13,10 @@ function agregarGasto() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify( {
-                categoria: selectorCategoriaGasto.value,
-                titulo: nombreGasto.value,
-                monto: montoGasto.value,
-                nota: notaGasto.value,
+                categoria: addExpenseCategory.value,
+                titulo: expenseName.value,
+                monto: expenseMount.value,
+                nota: expenseNote.value,
                 fecha: new Date() 
             } )
         }
@@ -38,12 +38,35 @@ function agregarGasto() {
 
 const init = () => {
 
-    btnAgregarGasto.onclick = () => {
+    btnAddExpense.onclick = () => {
 
         agregarGasto() ;
     
     }
 
 }
+
+function getWeekRange(weeksAgo = 1) {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    const endOfWeek = new Date(today);
+  
+    const dayOfWeek = today.getDay();
+    
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    startOfWeek.setDate(today.getDate() - diffToMonday - (7 * (weeksAgo - 1)));
+    startOfWeek.setHours(0, 0, 0, 0);
+  
+    const diffToSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+    endOfWeek.setDate(today.getDate() + diffToSunday - (7 * (weeksAgo - 1)));
+    endOfWeek.setHours(23, 59, 59, 999);
+  
+    return { startOfWeek, endOfWeek };
+  }
+  
+  const { startOfWeek, endOfWeek } = getWeekRange(2);
+  console.log('Inicio de la semana:', startOfWeek);
+  console.log('Fin de la semana:', endOfWeek);
+  
 
 init() ;

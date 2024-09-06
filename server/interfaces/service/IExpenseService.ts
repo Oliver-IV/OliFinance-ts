@@ -2,8 +2,8 @@ import ExpenseDTO from "../../dtos/ExpenseDTO";
 
 export default interface IExpenseService {
 
-    addExpense(expense:ExpenseDTO):Promise<ExpenseDTO> ;
+    addExpense(email:string, expense:ExpenseDTO):Promise<ExpenseDTO> ;
 
-    findExpenses(start:Date, end:Date):Promise<ExpenseDTO[]> ;
+    findExpenses(email:string, start:Date, end:Date):Promise<ExpenseDTO[] | null> ;
 
 }

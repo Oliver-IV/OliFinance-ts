@@ -28,7 +28,7 @@ export default class UserRepository implements IUserRepository {
            throw new RepositoryError("There's already a user with this email") ;
         } catch (error) {
             if (error instanceof RepositoryError) {
-                throw new RepositoryError(error.message) ;
+                throw error ;
             }
             throw new RepositoryError("There's an error with the connecion...") ;
         }

@@ -6,4 +6,6 @@ export default interface IUserService {
 
     findUserByEmail(email:string):Promise<UserDTO> ;
 
+    login(email:string, password:string):Promise<UserDTO> ;
+
 }

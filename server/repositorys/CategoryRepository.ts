@@ -1,6 +1,6 @@
 import { connection } from "../connection";
 import Category from "../entitys/Category";
-import { ServiceError } from "../errors/ServiceError";
+import { RepositoryError } from "../errors/RepositoryError";
 import ICategortRepository from "../interfaces/repository/ICategoryRepository";
 
 export default class CategoryRepository implements ICategortRepository {
@@ -21,8 +21,7 @@ export default class CategoryRepository implements ICategortRepository {
 
             return await repoCategories.save(category) ;
         } catch (error) {
-            console.log(error) ;
-            throw new ServiceError("There's an error with the connection...") ;
+            throw new RepositoryError("There's an error with the connection...") ;
         }
     }
 
@@ -32,11 +31,11 @@ export default class CategoryRepository implements ICategortRepository {
 
             return await repoCategories.remove(category) ;
         } catch (error) {
-            throw new ServiceError("There's an error with the connection...") ;
+            throw new RepositoryError("There's an error with the connection...") ;
         }
     }
     
-    async findCategoryByName(name: string): Promise<Category> {
+    async findCategoryByName(name: string): Promise<Category | null> {
         try {
             const repoCategories =  connection.getRepository(Category) ;
 
@@ -44,15 +43,9 @@ export default class CategoryRepository implements ICategortRepository {
                 name: name
             }) ;
 
-            if(findedCategory) {
-                return findedCategory ;
-            }
-            throw new ServiceError("There's not a category with this name") ;
+            return findedCategory ;
         } catch (error) {
-            if(error instanceof ServiceError) {
-                throw error ;
-            }
-            throw new ServiceError("There's an error with the connection...") ;
+            throw new RepositoryError("There's an error with the connection...") ;
         }
     }
 
