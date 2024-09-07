@@ -60,8 +60,9 @@ export default class ExpenseService implements IExpenseService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's a problem with the connection...") ;
             }
-            throw new ServiceError("There's a problem with the connection...") ;
         }
     }
 
@@ -77,8 +78,9 @@ export default class ExpenseService implements IExpenseService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's a problem with the connection...") ;
             }
-            throw new ServiceError("There's a problem with the connection...") ;
         }
     }
 

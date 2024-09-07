@@ -37,8 +37,9 @@ export default class IncomeService implements IIncomeService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's a problem with the connection...") ;
             }
-            throw new ServiceError("There's a problem with the connection...") ;
         }
     }
     async findIncomes(email: string, start: Date, end: Date): Promise<IncomeDTO[] | null> {
@@ -53,8 +54,9 @@ export default class IncomeService implements IIncomeService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's a problem with the connection...") ;
             }
-            throw new ServiceError("There's a problem with the connection...") ;
         }
     }
 

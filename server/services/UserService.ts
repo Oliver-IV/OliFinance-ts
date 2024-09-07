@@ -28,8 +28,9 @@ export default class UserService implements IUserService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's an error with the connection...") ;
             }
-            throw new ServiceError("There's an error with the connection...") ;
         }
     }
 
@@ -39,9 +40,9 @@ export default class UserService implements IUserService {
 
             if(findedUser) {
                 return this.c.userEntityToDto(findedUser) ;
+            } else {
+                throw new RepositoryError("There's not a user with this email") ;
             }
-            
-            throw new RepositoryError("There's not a user with this email") ;
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
@@ -63,8 +64,9 @@ export default class UserService implements IUserService {
         } catch (error) {
             if(error instanceof RepositoryError) {
                 throw new ServiceError(error.message) ;
+            } else {
+                throw new ServiceError("There's an error with the connection...") ;
             }
-            throw new ServiceError("There's an error with the connection...") ;
         }
     }
 
