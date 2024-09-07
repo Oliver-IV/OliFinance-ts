@@ -4,6 +4,7 @@ import { ServiceError } from "../errors/ServiceError";
 import IIncomeRepository from "../interfaces/repository/IIncomeRepository";
 import IUserRepository from "../interfaces/repository/IUserRepository";
 import IIncomeService from "../interfaces/service/IIncomeService";
+import IConverter from "../interfaces/utils/IConverter";
 import IncomeRepository from "../repositorys/IncomeRepository";
 import UserRepository from "../repositorys/UserRepository";
 import Converter from "../utils/Converter";
@@ -12,7 +13,7 @@ export default class IncomeService implements IIncomeService {
     
     private userRepository:IUserRepository ;
     private incomeRepository:IIncomeRepository ;
-    private c:Converter ;
+    private c:IConverter ;
 
     constructor() {
         this.userRepository = new UserRepository() ;

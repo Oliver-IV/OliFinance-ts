@@ -6,6 +6,7 @@ import ICategortRepository from "../interfaces/repository/ICategoryRepository";
 import IExpenseRepository from "../interfaces/repository/IExpenseRepository";
 import IUserRepository from "../interfaces/repository/IUserRepository";
 import IExpenseService from "../interfaces/service/IExpenseService";
+import IConverter from "../interfaces/utils/IConverter";
 import CategoryRepository from "../repositorys/CategoryRepository";
 import ExpenseRepository from "../repositorys/ExpenseRepository";
 import UserRepository from "../repositorys/UserRepository";
@@ -16,7 +17,7 @@ export default class ExpenseService implements IExpenseService {
     private userRepository:IUserRepository ;
     private expenseRepository:IExpenseRepository ;
     private categoryRepository:ICategortRepository ;
-    private c:Converter ;
+    private c:IConverter ;
 
     constructor() {
         this.userRepository = new UserRepository() ;
@@ -29,20 +30,26 @@ export default class ExpenseService implements IExpenseService {
         try {
             const expenseToAdd = this.c.expenseDtoToEntity(expense) ;
             const userToAdd = await this.userRepository.findUserByEmail(email) ;
-            const findedCategory = await this.categoryRepository.findCategoryByName(expense.category.name) ; ;
-            let categoryToAdd:Category ;
+            const categoryToAdd = await this.categoryRepository.findCategoryByName(expense.category.name) ; ;
+            // let categoryToAdd:Category ;
 
-            if(findedCategory) {
-                categoryToAdd = findedCategory ;
-            } else {
-                categoryToAdd = await this.categoryRepository.addCategory(this.c.categoryDtoToEntity(expense.category)) ;
-            }
+            // if(findedCategory) {
+            //     categoryToAdd = findedCategory ;
+            // } else {
+            //     categoryToAdd = await this.categoryRepository.addCategory(this.c.categoryDtoToEntity(expense.category)) ;
+            // }
 
             if(userToAdd) {
                 if((userToAdd.wallet - expenseToAdd.amount) > 0) {
                     userToAdd.wallet = userToAdd.wallet - expenseToAdd.amount ;
                     expenseToAdd.user = userToAdd ;
-                    expenseToAdd.category = categoryToAdd ;
+
+                    if(categoryToAdd){
+                        expenseToAdd.category = categoryToAdd ;
+                    } else {
+                        throw new RepositoryError("There's an error adding your expense...") ;
+                    }
+                        
                     return this.c.expenseEntityToDto(await this.expenseRepository.addExpense(expenseToAdd)) ;
                 } else {
                     throw new RepositoryError("You can't add an expense if your wallet is going to be lower than 0") ;

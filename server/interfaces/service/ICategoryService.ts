@@ -8,4 +8,6 @@ export default interface ICategoryService {
 
     findCategoryByName(name:string):Promise<CategoryDTO | null> ;
 
+    findUserCategories(email:string):Promise<CategoryDTO[] | null> ;
+
 }

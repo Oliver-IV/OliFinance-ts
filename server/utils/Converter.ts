@@ -1,3 +1,4 @@
+import IConverter from "../interfaces/utils/IConverter" ;
 import CategoryDTO from "../dtos/CategoryDTO";
 import ExpenseDTO from "../dtos/ExpenseDTO";
 import IncomeDTO from "../dtos/IncomeDTO";
@@ -7,7 +8,7 @@ import Expense from "../entitys/Expense";
 import Income from "../entitys/Income";
 import User from "../entitys/User";
 
-export default class Converter {
+export default class Converter implements IConverter {
 
     userDtoToEntity(dto:UserDTO) : User {
         return new User(

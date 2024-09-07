@@ -15,6 +15,7 @@ import ExpenseDTO from "./dtos/ExpenseDTO";
 import CategoryDTO from "./dtos/CategoryDTO";
 import IncomeService from "./services/IncomeService";
 import IncomeDTO from "./dtos/IncomeDTO";
+import CategoryService from "./services/CategoryService";
 
 async function init() {
     await connection.initialize() ;
@@ -25,6 +26,7 @@ async function init() {
     const service = new UserService() ;
     const service2 = new ExpenseService() ;
     const service3 = new IncomeService() ;
+    const service4 = new CategoryService() ;
 
     //console.log(await repo.save(new User("olipotro@gmail.com", "contrasenia", "oliver", "valle"))) ;
 
@@ -56,9 +58,15 @@ async function init() {
     // await service2.addExpense("elcompaoli@gmail.com", new ExpenseDTO(2000, new Date(), "Audifonos", "Audifonos PULSE 3D nuevos", new CategoryDTO("Tecnologia"))) ;
     //console.log(await service2.findExpenses("elcompaoli@gmail.com", new Date(2024, 5, 10), new Date(2025, 1, 10))) ;
 
-    await service3.addIncome("elcompaoli@gmail.com", new IncomeDTO(500, new Date())) ;
+    // await service3.addIncome("elcompaoli@gmail.com", new IncomeDTO(500, new Date())) ;
 
-    console.log(await service3.findIncomes("elcompaoli@gmail.com", new Date(2024, 5, 10), new Date(2025, 1, 10))) ;
+    // console.log(await service3.findIncomes("elcompaoli@gmail.com", new Date(2024, 5, 10), new Date(2025, 1, 10))) ;
+
+    //  await service4.addCategoryForUser("elcompaoli@gmail.com", new CategoryDTO("Hogar")) ;
+    await service4.removeCategory("elcompaoli@gmail.com", new CategoryDTO("hogar")) ;
+     console.log(await service4.findUserCategories("elcompaoli@gmail.com")) ;
+
+    // console.log(await service4.findCategoryByName("familia")) ;
 }
 
 init() ;

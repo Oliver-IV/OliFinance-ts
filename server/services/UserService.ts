@@ -4,6 +4,7 @@ import { RepositoryError } from "../errors/RepositoryError";
 import { ServiceError } from "../errors/ServiceError";
 import IUserRepository from "../interfaces/repository/IUserRepository";
 import IUserService from "../interfaces/service/IUserService";
+import IConverter from "../interfaces/utils/IConverter";
 import UserRepository from "../repositorys/UserRepository";
 import Converter from "../utils/Converter";
 import { encrypytAES, decryptAES } from "../utils/Encryption";
@@ -11,7 +12,7 @@ import { encrypytAES, decryptAES } from "../utils/Encryption";
 export default class UserService implements IUserService {
     
     private userRepository:IUserRepository ;
-    private c:Converter ;
+    private c:IConverter ;
 
     constructor() {
         this.userRepository = new UserRepository() ;
