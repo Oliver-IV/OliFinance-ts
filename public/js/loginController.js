@@ -16,7 +16,7 @@ function login() {
         }
     ).then(response => {
         if(response.ok) {
-            window.location.href("/menu")
+            window.location.href = "/menu"
         } else {
             return response.text().then(errorMessage => {
                 throw new Error(errorMessage);
@@ -36,3 +36,5 @@ const init = () => {
     } ;
 
 }
+
+init() ;
