@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { POSTlogin } from "../controllers/AuthController";
+import { POSTlogin, POSTcreateAccount } from "../controllers/AuthController";
 import { verifyWithTokenAccess } from "../utils/Authorization";
 
 const authRouter = Router() ;
@@ -14,6 +14,10 @@ authRouter.use((req, res, next) => {
 
 authRouter.post("/login", async (req, res) => {
     await POSTlogin(req, res) ;
+}) ;
+
+authRouter.post("/createAccount", async (req, res) => {
+    await POSTcreateAccount(req, res) ;
 }) ;
 
 export default authRouter ;

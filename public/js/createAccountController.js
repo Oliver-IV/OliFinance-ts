@@ -1,10 +1,12 @@
 const inputEmail = document.getElementById("email") ;
 const inputPassword = document.getElementById("password") ;
 const inputRepeatedPassword = document.getElementById("repeatedPassword") ;
+const inputName = document.getElementById("name") ;
+const inputLastName = document.getElementById("last_name") ;
 const btnCreateAccount = document.getElementById("btnCreateAcc") ;
 
 function login() {
-    fetch("/auth/agregar", 
+    fetch("/auth/createAccount", 
         {
             method: "POST",
             headers: {
@@ -13,7 +15,9 @@ function login() {
             body: JSON.stringify( {
                 email: inputEmail.value,
                 password: inputPassword.value,
-                repeatedPassword: inputRepeatedPassword.value
+                repeatedPassword: inputRepeatedPassword.value,
+                name: inputName.value,
+                last_name: inputLastName.value
             } )
         }
     ).then(response => {
@@ -40,3 +44,5 @@ const init = () => {
     } ;
 
 }
+
+init() ;
