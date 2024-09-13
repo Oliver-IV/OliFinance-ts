@@ -38,7 +38,11 @@ app.get("/", (req, res) => {
 }) ;
 
 app.get("/createAcc", (req, res) => {
-    res.sendFile(path.join(publicPath, "/pages/crearCuenta.html")) ;
+    if(!verifyWithTokenAccess(req)) {
+        res.sendFile(path.join(publicPath, "/pages/crearCuenta.html")) ;
+    } else {
+        res.redirect("/logoutfirst") ;
+    }
 }) ;
 
 app.get("/loginfirst", (req, res) => {
