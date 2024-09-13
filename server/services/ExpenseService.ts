@@ -39,23 +39,22 @@ export default class ExpenseService implements IExpenseService {
             //     categoryToAdd = await this.categoryRepository.addCategory(this.c.categoryDtoToEntity(expense.category)) ;
             // }
 
-            if(userToAdd) {
-                if((userToAdd.wallet - expenseToAdd.amount) > 0) {
-                    userToAdd.wallet = userToAdd.wallet - expenseToAdd.amount ;
-                    expenseToAdd.user = userToAdd ;
-
-                    if(categoryToAdd){
-                        expenseToAdd.category = categoryToAdd ;
-                    } else {
-                        throw new RepositoryError("There's an error adding your expense...") ;
-                    }
-                        
-                    return this.c.expenseEntityToDto(await this.expenseRepository.addExpense(expenseToAdd)) ;
-                } else {
-                    throw new RepositoryError("You can't add an expense if your wallet is going to be lower than 0") ;
-                }
-            } else {
+            if(!userToAdd) {
                 throw new RepositoryError("There's an error adding your expense...") ;
+            } 
+            if((userToAdd.wallet - expenseToAdd.amount) > 0) {
+                userToAdd.wallet = userToAdd.wallet - expenseToAdd.amount ;
+                expenseToAdd.user = userToAdd ;
+
+                if(categoryToAdd){
+                    expenseToAdd.category = categoryToAdd ;
+                } else {
+                    throw new RepositoryError("There's an error adding your expense...") ;
+                }
+                    
+                return this.c.expenseEntityToDto(await this.expenseRepository.addExpense(expenseToAdd)) ;
+            } else {
+                throw new RepositoryError("You can't add an expense if your wallet is going to be lower than 0") ;
             }
         } catch (error) {
             if(error instanceof RepositoryError) {

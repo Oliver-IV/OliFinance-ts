@@ -4,8 +4,9 @@ import UserService from "../services/UserService";
 import jwt from "jsonwebtoken" ;
 import UserDTO from "../dtos/UserDTO";
 import { SECRET_KEY, CHANGEP_KEY } from "../utils/Config";
+import IUserService from "../interfaces/service/IUserService";
 
-const service = new UserService() ;
+const service:IUserService = new UserService() ;
 
 async function POSTlogin(req:Request, res:Response) {
     try {

@@ -6,18 +6,18 @@ const btnAddExpense = document.getElementById("finishExpense") ;
 
 function agregarGasto() {
 
-    fetch("/gasto",
+    fetch("/expense/add",
         {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify( {
-                categoria: addExpenseCategory.value,
-                titulo: expenseName.value,
-                monto: expenseMount.value,
-                nota: expenseNote.value,
-                fecha: new Date() 
+                category: addExpenseCategory.value,
+                title: expenseName.value,
+                amount: expenseMount.value,
+                note: expenseNote.value,
+                date: new Date() 
             } )
         }
     ).then(response => {

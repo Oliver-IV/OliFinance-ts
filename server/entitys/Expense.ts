@@ -23,7 +23,7 @@ export default class Expense {
     @ManyToOne(() => Category)
     category : Category ;
 
-    @ManyToOne(() => User, {cascade: true})
+    @ManyToOne(() => User, {cascade: ["insert"]})
     user ?: User ;
 
     constructor(date:Date, amount:number, title:string, note:string, category:Category, user?:User, id?:bigint) {

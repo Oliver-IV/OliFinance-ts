@@ -57,6 +57,14 @@ export default class CategoryService implements ICategoryService {
             const user = await this.userRepository.findUserByEmail(email) ;
             const categoryToRemove = category.name ;
 
+            if(!user){
+                throw new RepositoryError("No user") ;
+            }
+
+            if(!user?.categories){
+                throw new RepositoryError("No categories") ;
+            }
+
             if(user?.categories && user && categoryToRemove) {
                 const newCategories = user?.categories?.filter(category => category.name.toLowerCase() != categoryToRemove.toLowerCase()) ;
                 user.categories = newCategories ;

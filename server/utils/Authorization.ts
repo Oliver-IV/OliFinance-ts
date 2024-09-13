@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import jwt from "jsonwebtoken" ;
+import jwt, { JwtPayload } from "jsonwebtoken" ;
 import { SECRET_KEY, CHANGEP_KEY } from "./Config";
 
 function verifyToken(req:Request, res:Response, next:NextFunction) {
@@ -22,12 +22,32 @@ function verifyToken(req:Request, res:Response, next:NextFunction) {
     next() ;
 }
 
+function getTokenData(req:Request) : string | JwtPayload | null {
+    const { access_token } = req.cookies ;
+    try {
+        return jwt.verify(access_token, SECRET_KEY) ;
+    } catch (error) {
+        return null ;
+    }
+}
+
 function verifyWithTokenAccess(req:Request):boolean {
-    return ((req as any).session.user)
+    //return ((req as any).session.user)
+    const { access_token } = req.cookies ;
+    try {
+        const data = jwt.verify(access_token, SECRET_KEY) ;
+        if(data) {
+            return true ;
+        } else {
+            return false ;
+        }
+    } catch (error) {
+        return false ;
+    }
 }
 
 function verifyWithNoTokenAccess(req:Request, res:Response) {
 
 }
 
-export { verifyToken, verifyWithNoTokenAccess, verifyWithTokenAccess } ;
+export { getTokenData, verifyToken, verifyWithNoTokenAccess, verifyWithTokenAccess } ;
