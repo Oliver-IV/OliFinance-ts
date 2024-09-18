@@ -9,6 +9,7 @@ import categoryRouter from "./routers/CategoryRouter";
 import expenseRouter from "./routers/ExpenseRouter";
 import incomeRouter from "./routers/IncomeRouter";
 import menuRouter from "./routers/MenuRouter";
+import userRouter from "./routers/UserRouter";
 import { PORT, publicPath } from "./utils/Config";
 import { verifyToken, verifyWithTokenAccess } from "./utils/Authorization";
 
@@ -32,6 +33,7 @@ app.use("/category", categoryRouter) ;
 app.use("/expense", expenseRouter) ;
 app.use("/income", incomeRouter) ;
 app.use("/menu", menuRouter) ;
+app.use("/user", userRouter) ;
 
 app.get("/", (req, res) => {
     if(!verifyWithTokenAccess(req)) {

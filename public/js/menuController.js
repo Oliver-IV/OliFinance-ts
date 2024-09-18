@@ -1,8 +1,15 @@
-const addExpenseCategory = document.getElementById("expense-category") ;
-const expenseName = document.getElementById("expense-name") ;
-const expenseMount = document.getElementById("expense-amount") ;
-const expenseNote = document.getElementById("expense-note") ;
+const selectorExpenseCategory = document.getElementById("expense-category") ;
+const inputExpenseName = document.getElementById("expense-name") ;
+const inputExpenseMount = document.getElementById("expense-amount") ;
+const inputNote = document.getElementById("expense-note") ;
 const btnAddExpense = document.getElementById("finishExpense") ;
+const selectorDateFilter = document.getElementById("date-filter") ;
+const walletText = document.getElementById("wallet") ;
+const expenseAmountText = document.getElementById("expensesAmount") ;
+const incomeAmountText = document.getElementById("incomesAmount") ;
+
+var expenses = [] ;
+let expenseChart ;
 
 function agregarGasto() {
 
@@ -13,10 +20,10 @@ function agregarGasto() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify( {
-                category: addExpenseCategory.value,
-                title: expenseName.value,
-                amount: expenseMount.value,
-                note: expenseNote.value,
+                category: selectorExpenseCategory.value,
+                title: inputExpenseName.value,
+                amount: inputExpenseMount.value,
+                note: inputNote.value,
                 date: new Date() 
             } )
         }
@@ -36,37 +43,248 @@ function agregarGasto() {
 
 }
 
+function obtenerGastos() {
+
+    const { start, end } = getWeekRange(getWeekRangeFromDateFilter(selectorDateFilter.value)) ;
+
+    fetch(`/expense?start=${start}&&end=${end}`, 
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if(response.ok) {
+            response.json().then(data => {
+                expenses = data ;
+                mostrarGraficaDeGastos() ;
+            }) ;
+        } else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
+
+} ;
+
+function obtenerCarteraUsuario() {
+
+    const { start, end } = getWeekRange(getWeekRangeFromDateFilter(selectorDateFilter.value)) ;
+
+    fetch(`/user/wallet?start=${start}&&end=${end}`, 
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if(response.ok) {
+            response.json().then(data => {
+                walletText.innerText = "$" + data.amount ;
+            }) ;
+        } else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
+
+}
+
+function obtenerMontoGastosUsuario() {
+
+    const { start, end } = getWeekRange(getWeekRangeFromDateFilter(selectorDateFilter.value)) ;
+
+    fetch(`/expense/amount?start=${start}&&end=${end}`, 
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if(response.ok) {
+            response.json().then(data => {
+                expenseAmountText.innerText = "$" + data.amount ;
+            }) ;
+        } else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
+
+}
+
+function obtenerMontoIngresosUsuario() {
+
+    const { start, end } = getWeekRange(getWeekRangeFromDateFilter(selectorDateFilter.value)) ;
+
+    fetch(`/income/amount?start=${start}&&end=${end}`, 
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if(response.ok) {
+            response.json().then(data => {
+                incomeAmountText.innerText = "$" + data.amount ;
+            }) ;
+        } else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
+
+}
+
+function mostrarGraficaDeGastos() {
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    const categoriesMap = new Map(); 
+
+    expenses.forEach(expense => {
+        const category = expense.category.name;
+        const amount = expense.amount;
+
+        if (categoriesMap.has(category)) {
+            categoriesMap.set(category, categoriesMap.get(category) + amount);
+        } else {
+            categoriesMap.set(category, amount);
+        }
+    });
+
+    const categories = Array.from(categoriesMap.keys());
+    const expensesAmounts = Array.from(categoriesMap.values());
+
+    if (expenseChart) {
+        expenseChart.destroy();
+    }
+
+    // Crear gráfico
+    expenseChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: expensesAmounts, 
+                backgroundColor: generarColores(categories.length), 
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 10,
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                title: {
+                    display: false
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 0,
+                    bottom: 0
+                }
+            }
+        }
+    });
+}
+
+
+
+function generarColores(cantidad) {
+    const colores = [];
+    for (let i = 0; i < cantidad; i++) {
+        const color = `hsl(${Math.random() * 360}, 100%, 75%)`;  // Colores aleatorios en formato HSL
+        colores.push(color);
+    }
+    return colores;
+}
+
+function getWeekRange(weeksAgo = 1) {
+    const today = new Date();
+    const start = new Date(today);
+    const end = new Date(today);
+  
+    const dayOfWeek = today.getDay();
+    
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    start.setDate(today.getDate() - diffToMonday - (7 * (weeksAgo - 1)));
+    start.setHours(0, 0, 0, 0);
+  
+    const diffToSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
+    end.setDate(today.getDate() + diffToSunday - (7 * (weeksAgo - 1)));
+    end.setHours(23, 59, 59, 999);
+  
+    return { start, end };
+  }
+
+  function getWeekRangeFromDateFilter() {
+    switch (selectorDateFilter.value) {
+        case "this-week":
+            return 1 ; 
+        case "last-week" :
+            return 2 ;
+        case "two-weeks-ago":
+            return 3 ;
+        case "three-weeks-ago":
+            return 4 ;
+        case "four-weeks-ago":
+            return 5 ;
+        default:
+            Swal.fire("Error", "Filtro no valido", "error") ;
+            break;
+    }
+  }
+
 const init = () => {
+
+    obtenerGastos() ;
+    obtenerCarteraUsuario() ;
+    obtenerMontoGastosUsuario() ;
+    obtenerMontoIngresosUsuario() ;
 
     btnAddExpense.onclick = () => {
 
         agregarGasto() ;
     
-    }
+    } ;
+
+    selectorDateFilter.onchange = () => {
+
+        obtenerGastos() ;
+        obtenerMontoGastosUsuario() ;
+        obtenerMontoIngresosUsuario() ;
+
+    } ;
 
 }
 
-function getWeekRange(weeksAgo = 1) {
-    const today = new Date();
-    const startOfWeek = new Date(today);
-    const endOfWeek = new Date(today);
-  
-    const dayOfWeek = today.getDay();
-    
-    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    startOfWeek.setDate(today.getDate() - diffToMonday - (7 * (weeksAgo - 1)));
-    startOfWeek.setHours(0, 0, 0, 0);
-  
-    const diffToSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
-    endOfWeek.setDate(today.getDate() + diffToSunday - (7 * (weeksAgo - 1)));
-    endOfWeek.setHours(23, 59, 59, 999);
-  
-    return { startOfWeek, endOfWeek };
-  }
-  
-  const { startOfWeek, endOfWeek } = getWeekRange(2);
-  console.log('Inicio de la semana:', startOfWeek);
-  console.log('Fin de la semana:', endOfWeek);
+
   
 
 init() ;

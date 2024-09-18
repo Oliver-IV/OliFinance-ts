@@ -51,6 +51,23 @@ export default class UserService implements IUserService {
         }
     }
 
+    async getUserWallet(email: string): Promise<number> {
+        try {
+            const findedUser = await this.userRepository.findUserByEmail(email) ;
+
+            if(findedUser) {
+                return findedUser.wallet ;
+            } else {
+                throw new Error() ;
+            }
+        } catch (error) {
+            if(error instanceof RepositoryError) {
+                throw new ServiceError(error.message) ;
+            }
+            throw new ServiceError("There's an error with the connection...") ;
+        }
+    }
+
     async login(email: string, password: string): Promise<UserDTO> {
         try {
             const findedUser = await this.userRepository.findUserByEmail(email) ;

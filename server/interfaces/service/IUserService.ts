@@ -6,6 +6,8 @@ export default interface IUserService {
 
     findUserByEmail(email:string):Promise<UserDTO> ;
 
+    getUserWallet(email:string):Promise<number> ;
+
     login(email:string, password:string):Promise<UserDTO> ;
 
 }
