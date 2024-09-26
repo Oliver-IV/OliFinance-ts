@@ -13,7 +13,7 @@ export default class Income {
     @Column({name: "date", nullable: false})
     date : Date ;
 
-    @ManyToOne(() => User, {cascade: true})
+    @ManyToOne(() => User, {cascade: ["insert", "update"]})
     user ?: User ;
 
     constructor(date:Date, amount:number, user?:User, id?:bigint) {

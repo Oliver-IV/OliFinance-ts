@@ -17,4 +17,8 @@ menuRouter.get("", (req, res) => {
     res.sendFile(path.join(publicPath, "pages/menu.html")) ;
 }) ;
 
+menuRouter.get("/expenses", (req, res) => {
+    res.sendFile(path.join(publicPath, "pages/gastos.html")) ;
+}) ;
+
 export default menuRouter ;

@@ -38,7 +38,6 @@ export default class CategoryRepository implements ICategortRepository {
     async findCategoryByName(name: string): Promise<Category | null> {
         try {
             const repoCategories =  connection.getRepository(Category) ;
-
             const findedCategory = await repoCategories.findOneBy({
                 name: name
             }) ;

@@ -43,7 +43,7 @@ export default class ExpenseService implements IExpenseService {
                 throw new RepositoryError("There's an error adding your expense...") ;
             } 
             if((userToAdd.wallet - expenseToAdd.amount) > 0) {
-                userToAdd.wallet = userToAdd.wallet - expenseToAdd.amount ;
+                userToAdd.wallet = Number(userToAdd.wallet) -  Number(expenseToAdd.amount) ;
                 expenseToAdd.user = userToAdd ;
 
                 if(categoryToAdd){
@@ -68,7 +68,6 @@ export default class ExpenseService implements IExpenseService {
     async findExpenses(email:string, start: Date, end: Date): Promise<ExpenseDTO[] | null> {
         try {
             const findedUser = await this.userRepository.findUserByEmail(email) ;
-            
             if(findedUser) {
                 return this.c.listExpenseEntityToDto(await this.expenseRepository.findExpenses(findedUser, start, end) || []) ;
             } else {

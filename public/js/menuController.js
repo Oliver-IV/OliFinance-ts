@@ -1,12 +1,16 @@
 const selectorExpenseCategory = document.getElementById("expense-category") ;
 const inputExpenseName = document.getElementById("expense-name") ;
 const inputExpenseMount = document.getElementById("expense-amount") ;
+const inputIncomeMount = document.getElementById("income-amount") ;
 const inputNote = document.getElementById("expense-note") ;
 const btnAddExpense = document.getElementById("finishExpense") ;
+const btnAddIncome = document.getElementById("addIncomeSubmit") ;
+const btnAddNewCategory = document.getElementById("saveNewCategory") ;
 const selectorDateFilter = document.getElementById("date-filter") ;
 const walletText = document.getElementById("wallet") ;
 const expenseAmountText = document.getElementById("expensesAmount") ;
 const incomeAmountText = document.getElementById("incomesAmount") ;
+const inputNewCategory = document.getElementById("new-category") ;
 
 var expenses = [] ;
 let expenseChart ;
@@ -41,6 +45,68 @@ function agregarGasto() {
         Swal.fire("Error", err.message, "error") ;
     }) ;
 
+}
+
+function agregarIngreso() {
+
+    if(inputIncomeMount.value) {
+        fetch("/income/add", 
+            {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        amount: inputIncomeMount.value, 
+                        date: new Date() 
+                    }
+                ) 
+            }
+        ).then(response => {
+            if(response.ok) {
+                Swal.fire("Gasto agregado!", "Se ha agregado el ingreso con exito", "success").then(() => {
+                    window.location.reload() ;
+                }) ;
+            } else {
+                return response.text().then(errorMessage => {
+                    throw new Error(errorMessage);
+                });
+            }
+        }).catch(err => {
+            Swal.fire("Error", err.message, "error") ;
+        }) ;
+    } else {
+        Swal.fire("Error", "Ingresa un monto", "error") ;
+    }
+    
+}
+
+function agregarCategoria() {
+
+    fetch("/category/add", 
+        {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name: inputNewCategory.value})
+        }
+    ).then(response => {
+        if(response.ok) {
+            Swal.fire("Categoria agregada!", "Se ha agregado la categoria con exito", "success").then(() => {
+                newCategoryInput.classList.add('hidden');
+                resetExpenseForm();
+                obtenerCategoriasUsuario() ;
+            }) ;
+        }else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
 }
 
 function obtenerGastos() {
@@ -85,7 +151,7 @@ function obtenerCarteraUsuario() {
     ).then(response => {
         if(response.ok) {
             response.json().then(data => {
-                walletText.innerText = "$" + data.amount ;
+                walletText.innerText = `$${data.amount}` ;
             }) ;
         } else {
             return response.text().then(errorMessage => {
@@ -141,6 +207,54 @@ function obtenerMontoIngresosUsuario() {
             response.json().then(data => {
                 incomeAmountText.innerText = "$" + data.amount ;
             }) ;
+        } else {
+            return response.text().then(errorMessage => {
+                throw new Error(errorMessage);
+            });
+        }
+    }).catch(err => {
+        Swal.fire("Error", err.message, "error") ;
+    }) ;
+
+}
+
+function obtenerCategoriasUsuario() {
+
+    fetch("/category", 
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    ).then(response => {
+        if(response.ok) {
+            response.json().then(data => {
+                const select = document.getElementById('expense-category');
+
+        // Limpia las opciones existentes antes de añadir nuevas
+                select.innerHTML = '';
+
+                // Agregar la primera opción "Seleccionar categoría"
+                const firstOption = document.createElement('option');
+                firstOption.value = "";
+                firstOption.textContent = "Seleccionar categoría";
+                select.appendChild(firstOption);
+
+                // Itera sobre los datos para añadir las opciones dinámicamente
+                data.forEach(data => {
+                    const option = document.createElement('option');
+                    option.value = data.name;
+                    option.textContent = data.name;
+                    select.appendChild(option);
+                });
+
+                // Agregar la última opción "Agregar nueva categoría"
+                const lastOption = document.createElement('option');
+                lastOption.value = "new";
+                lastOption.textContent = "Agregar nueva categoría";
+                select.appendChild(lastOption);
+            });
         } else {
             return response.text().then(errorMessage => {
                 throw new Error(errorMessage);
@@ -215,7 +329,6 @@ function mostrarGraficaDeGastos() {
 }
 
 
-
 function generarColores(cantidad) {
     const colores = [];
     for (let i = 0; i < cantidad; i++) {
@@ -263,16 +376,29 @@ function getWeekRange(weeksAgo = 1) {
 
 const init = () => {
 
+    obtenerCategoriasUsuario() ;
     obtenerGastos() ;
     obtenerCarteraUsuario() ;
     obtenerMontoGastosUsuario() ;
     obtenerMontoIngresosUsuario() ;
+
+    btnAddIncome.onclick = () => {
+
+        agregarIngreso() ;
+
+    } ;
 
     btnAddExpense.onclick = () => {
 
         agregarGasto() ;
     
     } ;
+
+    btnAddNewCategory.onclick = () => {
+
+        agregarCategoria() ;
+
+    }
 
     selectorDateFilter.onchange = () => {
 

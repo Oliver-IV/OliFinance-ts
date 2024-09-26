@@ -27,7 +27,7 @@ export default class IncomeService implements IIncomeService {
             const incomeToAdd = this.c.incomeDtoToEntity(income) ;
 
             if(userToAdd) {
-                userToAdd.wallet = userToAdd.wallet + incomeToAdd.amount ;
+                userToAdd.wallet = Number(userToAdd.wallet) + Number(incomeToAdd.amount) ;
                 incomeToAdd.user = userToAdd ;
 
                 return this.c.incomeEntityToDto(await this.incomeRepository.addIncome(incomeToAdd)) ;
