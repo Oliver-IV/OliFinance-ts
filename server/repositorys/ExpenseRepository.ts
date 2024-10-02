@@ -8,13 +8,6 @@ import { RepositoryError } from "../errors/RepositoryError";
 export default class ExpenseRepository implements IExpenseRepository {
 
     constructor() {
-        this.initializeConnection() ;
-    }
-
-    private async initializeConnection() {
-        if(!connection.isInitialized) {
-            await connection.initialize();
-        }
     }
 
     async addExpense(expense: Expense): Promise<Expense> {

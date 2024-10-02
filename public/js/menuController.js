@@ -65,7 +65,7 @@ function agregarIngreso() {
             }
         ).then(response => {
             if(response.ok) {
-                Swal.fire("Gasto agregado!", "Se ha agregado el ingreso con exito", "success").then(() => {
+                Swal.fire("Ingreso agregado!", "Se ha agregado el ingreso con exito", "success").then(() => {
                     window.location.reload() ;
                 }) ;
             } else {

@@ -6,13 +6,6 @@ import ICategortRepository from "../interfaces/repository/ICategoryRepository";
 export default class CategoryRepository implements ICategortRepository {
 
     constructor() {
-        this.initializeConnection() ;
-    }
-
-    private async initializeConnection() {
-        if(!connection.isInitialized) {
-            await connection.initialize();
-        }
     }
 
     async addCategory(category: Category): Promise<Category> {

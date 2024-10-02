@@ -6,13 +6,6 @@ import IUserRepository from "../interfaces/repository/IUserRepository";
 export default class UserRepository implements IUserRepository {
 
     constructor() {
-        this.initializeConnection() ;
-    }
-    
-    private async initializeConnection() {
-        if(!connection.isInitialized) {
-            await connection.initialize();
-        }
     }
 
     async addUser(user: User): Promise<User> {

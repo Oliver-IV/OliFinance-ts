@@ -12,6 +12,9 @@ import menuRouter from "./routers/MenuRouter";
 import userRouter from "./routers/UserRouter";
 import { PORT, publicPath } from "./utils/Config";
 import { verifyToken, verifyWithTokenAccess } from "./utils/Authorization";
+import { connection } from "./connection";
+
+connection.initialize() ;
 
 const app = express() ;
 

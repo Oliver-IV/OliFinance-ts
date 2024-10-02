@@ -8,13 +8,6 @@ import { RepositoryError } from "../errors/RepositoryError";
 export default class IncomeRepository implements IIncomeRepository {
 
     constructor() {
-        this.initializeConnection() ;
-    }
-
-    private async initializeConnection() {
-        if(!connection.isInitialized) {
-            await connection.initialize();
-        }
     }
 
     async addIncome(income: Income): Promise<Income> {
