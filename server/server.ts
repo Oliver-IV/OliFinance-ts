@@ -13,12 +13,14 @@ import userRouter from "./routers/UserRouter";
 import { PORT, publicPath } from "./utils/Config";
 import { verifyToken, verifyWithTokenAccess } from "./utils/Authorization";
 import { connection } from "./connection";
+import cors from "cors" ;
 
 connection.initialize() ;
 
 const app = express() ;
 
 app.set("view engine", "ejs") ;
+app.use(cors()) ;
 app.use(bodyParser.urlencoded({extended: true})) ;
 app.use(express.static(publicPath)) ;
 app.use(express.json()) ;
