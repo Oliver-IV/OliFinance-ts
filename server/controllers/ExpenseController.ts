@@ -12,7 +12,7 @@ async function POSTaddExpense(req:Request, res:Response) {
     try {
         const { amount, date, title, note, category } = req.body ;
         const tokenData = getTokenData(req) ;
-        const addedExpense = await service.addExpense((tokenData as any).email, new ExpenseDTO(amount, date, title, note, new CategoryDTO(category))) ;
+        const addedExpense = await service.addExpense((tokenData as any).email, new ExpenseDTO(amount, new Date(date), title, note, new CategoryDTO(category))) ;
         
         if(addedExpense) {
             res.status(200).send("Expense added successfully") 

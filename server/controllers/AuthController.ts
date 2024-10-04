@@ -26,7 +26,7 @@ async function POSTlogin(req:Request, res:Response) {
 
             res.status(200).cookie("access_token", cookie, {
                 httpOnly: true,
-                secure: true,
+                secure: false,
                 sameSite: "strict",
                 maxAge: 3600000
             }).send("Logged succesully") ;
