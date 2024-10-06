@@ -35,6 +35,14 @@ const init = () => {
 
     } ;
 
+    document.onkeydown = (event) => {
+
+        if(event.key === 'Enter') {
+            login() ;
+        }
+
+    } ;
+
 }
 
 init() ;

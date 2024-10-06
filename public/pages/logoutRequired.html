@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Restringido</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-100 to-white">
+        <div class="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-lg text-center">
+            <i data-lucide="lock" class="mx-auto h-12 w-12 text-blue-500 mb-6"></i>
+            <h1 class="text-2xl font-bold text-gray-900 mb-2">Acceso Restringido</h1>
+            <p class="text-gray-600 mb-6">
+                Necesitas cerrar sesión para acceder a esta página. ¿Deseas volver al menú?
+            </p>
+            <a href="/menu" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Volver
+            </a>
+            <p class="mt-4 text-sm text-gray-500">
+                <button  id="logout" class="text-blue-600 hover:underline">Cerrar sesión </button>
+            </p>
+        </div>
+    </div>
+    <script>
+        document.getElementById("logout").onclick = () => {
+                fetch("/logout", {
+                    method: "POST"
+                }).then(response => {
+                    window.location.href = "/" ;
+                }) ;
+            }
+    </script>
+</body>
+</html>

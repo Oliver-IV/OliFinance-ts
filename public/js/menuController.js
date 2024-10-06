@@ -11,6 +11,7 @@ const walletText = document.getElementById("wallet") ;
 const expenseAmountText = document.getElementById("expensesAmount") ;
 const incomeAmountText = document.getElementById("incomesAmount") ;
 const inputNewCategory = document.getElementById("new-category") ;
+const btnLogout = document.getElementById("logoutBtn") ;
 
 var expenses = [] ;
 let expenseChart ;
@@ -385,6 +386,35 @@ function getWeekRange(weeksAgo = 1) {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
 
+async function logout() {
+    const result = await Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Deseas cerrar la sesión?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, cerrar sesión',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+        fetch("/logout", 
+            {
+                method: "POST"
+            }
+        ).then(response => {
+            if(response.ok) {
+                window.location.href = "/" ;
+            } else {
+                Swal.fire("Error", "Hubo un error al cerrar sesión...", "error") ;
+            }
+        }).catch(err => {
+            Swal.fire("Error", "Hubo un error al cerrar sesión...", "error") ;
+        }) ;
+    }
+}
+
 
 const init = () => {
 
@@ -417,6 +447,12 @@ const init = () => {
         obtenerGastos() ;
         obtenerMontoGastosUsuario() ;
         obtenerMontoIngresosUsuario() ;
+
+    } ;
+
+    btnLogout.onclick = async () => {
+
+        await logout() ;
 
     } ;
 

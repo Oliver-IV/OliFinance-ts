@@ -8,20 +8,17 @@ const newCategoryInput = document.getElementById('newCategoryInput');
 const expenseStepDisplay = document.getElementById('expenseStep');
 let currentExpenseStep = 1;
 
-// Toggle income form
 addIncomeBtn.addEventListener('click', () => {
     addIncomeForm.classList.toggle('hidden');
     addExpenseForm.classList.add('hidden');
 });
 
-// Toggle expense form
 addExpenseBtn.addEventListener('click', () => {
     addExpenseForm.classList.toggle('hidden');
     addIncomeForm.classList.add('hidden');
     resetExpenseForm();
 });
 
-// Handle expense category selection
 expenseCategory.addEventListener('change', (e) => {
     if (e.target.value === 'new') {
         newCategoryInput.classList.remove('hidden');
@@ -40,13 +37,12 @@ function validateStep(step) {
         case 3:
             return inputExpenseMount.value > 0;
         case 4:
-            return true; // Note is optional
+            return true; 
         default:
             return false;
     }
 }
 
-// Function to show error message
 function showError(message) {
     Swal.fire({
         icon: 'error',
@@ -55,7 +51,6 @@ function showError(message) {
     });
 }
 
-// Handle expense form steps
 document.querySelectorAll('[id^="nextStep"]').forEach(button => {
     button.addEventListener('click', () => {
         if (validateStep(currentExpenseStep)) {
@@ -81,7 +76,6 @@ document.querySelectorAll('[id^="nextStep"]').forEach(button => {
     });
 });
 
-// Handle back buttons for expense form
 document.querySelectorAll('[id^="prevStep"]').forEach(button => {
     button.addEventListener('click', () => {
         document.getElementById(`expenseStep${currentExpenseStep}`).classList.add('hidden');
@@ -91,23 +85,6 @@ document.querySelectorAll('[id^="prevStep"]').forEach(button => {
     });
 });
 
-// Handle finish button
-document.getElementById('finishExpense').addEventListener('click', () => {
-    if (validateStep(4)) {
-        // Here you would typically save the expense data
-        Swal.fire({
-            icon: 'success',
-            title: 'Éxito',
-            text: 'Gasto agregado correctamente.',
-        }).then(() => {
-            // Reset form and hide it
-            resetExpenseForm();
-            addExpenseForm.classList.add('hidden');
-        });
-    }
-});
-
-// Reset expense form
 function resetExpenseForm() {
     currentExpenseStep = 1;
     expenseStepDisplay.textContent = currentExpenseStep;

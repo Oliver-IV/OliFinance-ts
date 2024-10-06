@@ -57,11 +57,20 @@ app.get("/createAcc", (req, res) => {
 }) ;
 
 app.get("/loginfirst", (req, res) => {
-    res.send("Log in first") ;
+    res.sendFile(path.join(publicPath, "/pages/loginRequired.html")) ;
 }) ;
 
 app.get("/logoutfirst", (req, res) => {
-    res.send("Log out first") ;
+    res.sendFile(path.join(publicPath, "/pages/logoutRequired.html")) ;
+}) ;
+
+app.get("/about", (req, res) => {
+    res.sendFile(path.join(publicPath, "/pages/acercaDe.html")) ;
+}) ;
+
+app.post("/logout", (req, res) => {
+    res.clearCookie("access_token") ;
+    res.status(200).send() ;
 }) ;
 
 app.listen(PORT, () => {
