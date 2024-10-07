@@ -10,15 +10,19 @@ export default class Income {
     @Column({name: "amount", nullable: false})
     amount : number ;
 
+    @Column({name: "title", nullable: true})
+    title : string ;
+
     @Column({name: "date", nullable: false})
     date : Date ;
 
     @ManyToOne(() => User, {cascade: ["insert", "update"]})
     user ?: User ;
 
-    constructor(date:Date, amount:number, user?:User, id?:bigint) {
+    constructor(date:Date, amount:number, title:string, user?:User, id?:bigint) {
         this.date = date ;
         this.amount = amount ;
+        this.title = title ;
         this.user = user ;
         this.id = id ;
     }

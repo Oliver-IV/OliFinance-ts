@@ -2,18 +2,20 @@ const selectorExpenseCategory = document.getElementById("expense-category") ;
 const inputExpenseName = document.getElementById("expense-name") ;
 const inputExpenseMount = document.getElementById("expense-amount") ;
 const inputIncomeMount = document.getElementById("income-amount") ;
-const inputNote = document.getElementById("expense-note") ;
+const inputExpenseNote = document.getElementById("expense-note") ;
+const inputIncomeNote = document.getElementById("income-note") ;
 const btnAddExpense = document.getElementById("finishExpense") ;
-const btnAddIncome = document.getElementById("addIncomeSubmit") ;
+const btnAddIncome = document.getElementById("finishIncome") ;
 const btnAddNewCategory = document.getElementById("saveNewCategory") ;
 const selectorDateFilter = document.getElementById("date-filter") ;
 const walletText = document.getElementById("wallet") ;
 const expenseAmountText = document.getElementById("expensesAmount") ;
 const incomeAmountText = document.getElementById("incomesAmount") ;
 const inputNewCategory = document.getElementById("new-category") ;
-const btnLogout = document.getElementById("logoutBtn") ;
+const panelIncomes = document.getElementById("panelIncomes") ;
+const panelExpenses = document.getElementById("panelExpenses") ;
 
-var expenses = [] ;
+var renderExpenses = [] ;
 let expenseChart ;
 
 function agregarGasto() {
@@ -28,14 +30,23 @@ function agregarGasto() {
                 category: selectorExpenseCategory.value,
                 title: inputExpenseName.value,
                 amount: inputExpenseMount.value,
-                note: inputNote.value,
+                note: inputExpenseNote.value,
                 date: formatDateToISOString(new Date())
             } )
         }
     ).then(response => {
         if(response.ok) {
-            Swal.fire("Gasto agregado!", "Se ha agregado el gasto con exito", "success").then(() => {
-                window.location.reload() ;
+            Swal.fire({
+                title: "¡Gasto agregado!",
+                text: "Se ha agregado el gasto con éxito",
+                icon: "success",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+                }
+            }).then(() => {
+                resetExpenseForm() ;
+                resetWalletExpenseAndIncomeMount() ;
             }) ;
         } else {
             return response.text().then(errorMessage => {
@@ -43,7 +54,14 @@ function agregarGasto() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
@@ -60,14 +78,24 @@ function agregarIngreso() {
                 body: JSON.stringify(
                     {
                         amount: inputIncomeMount.value, 
-                        date: new Date() 
+                        date: formatDateToISOString(new Date()),
+                        title: incomeNote.value
                     }
                 ) 
             }
         ).then(response => {
             if(response.ok) {
-                Swal.fire("Ingreso agregado!", "Se ha agregado el ingreso con exito", "success").then(() => {
-                    window.location.reload() ;
+                Swal.fire({
+                    title: "¡Ingreso agregado!",
+                    text: "Se ha agregado el ingreso con éxito",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+                    }
+                }).then(() => {
+                    resetIncomeForm() ;
+                    resetWalletExpenseAndIncomeMount() ;
                 }) ;
             } else {
                 return response.text().then(errorMessage => {
@@ -75,10 +103,24 @@ function agregarIngreso() {
                 });
             }
         }).catch(err => {
-            Swal.fire("Error", err.message, "error") ;
+            Swal.fire({
+                title: "Error",
+                text: err.message,
+                icon: "error",
+                customClass: {
+                    confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+                }
+            });
         }) ;
     } else {
-        Swal.fire("Error", "Ingresa un monto", "error") ;
+        Swal.fire({
+            title: "Error",
+            text: "Ingresa un monto",
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }
     
 }
@@ -95,9 +137,16 @@ function agregarCategoria() {
         }
     ).then(response => {
         if(response.ok) {
-            Swal.fire("Categoria agregada!", "Se ha agregado la categoria con exito", "success").then(() => {
+            Swal.fire({
+                title: "¡Categoría Agregada!",
+                text: "Se ha agregado la categoría con éxito",
+                icon: "success",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+                }
+            }).then(() => {
                 newCategoryInput.classList.add('hidden');
-                resetExpenseForm();
                 obtenerCategoriasUsuario() ;
             }) ;
         }else {
@@ -106,7 +155,14 @@ function agregarCategoria() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 }
 
@@ -124,7 +180,7 @@ function obtenerGastos() {
     ).then(response => {
         if(response.ok) {
             response.json().then(data => {
-                expenses = data ;
+                renderExpenses = data ;
                 mostrarGraficaDeGastos() ;
             }) ;
         } else {
@@ -133,7 +189,14 @@ function obtenerGastos() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 } ;
@@ -160,7 +223,14 @@ function obtenerCarteraUsuario() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
@@ -187,7 +257,14 @@ function obtenerMontoGastosUsuario() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
@@ -214,7 +291,14 @@ function obtenerMontoIngresosUsuario() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
@@ -262,7 +346,14 @@ function obtenerCategoriasUsuario() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
@@ -271,7 +362,7 @@ function mostrarGraficaDeGastos() {
     const ctx = document.getElementById('expenseChart').getContext('2d');
     const categoriesMap = new Map(); 
 
-    expenses.forEach(expense => {
+    renderExpenses.forEach(expense => {
         const category = expense.category.name;
         const amount = expense.amount;
 
@@ -333,7 +424,7 @@ function mostrarGraficaDeGastos() {
 function generarColores(cantidad) {
     const colores = [];
     for (let i = 0; i < cantidad; i++) {
-        const color = `hsl(${Math.random() * 360}, 100%, 75%)`;  // Colores aleatorios en formato HSL
+        const color = `hsl(${Math.random() * 360}, 100%, 75%)`;
         colores.push(color);
     }
     return colores;
@@ -386,35 +477,12 @@ function getWeekRange(weeksAgo = 1) {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
 }
 
-async function logout() {
-    const result = await Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¿Deseas cerrar la sesión?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, cerrar sesión',
-        cancelButtonText: 'Cancelar'
-    });
-
-    if (result.isConfirmed) {
-        fetch("/logout", 
-            {
-                method: "POST"
-            }
-        ).then(response => {
-            if(response.ok) {
-                window.location.href = "/" ;
-            } else {
-                Swal.fire("Error", "Hubo un error al cerrar sesión...", "error") ;
-            }
-        }).catch(err => {
-            Swal.fire("Error", "Hubo un error al cerrar sesión...", "error") ;
-        }) ;
-    }
+function resetWalletExpenseAndIncomeMount() {
+    obtenerGastos() ;
+    obtenerCarteraUsuario() ;
+    obtenerMontoGastosUsuario() ;
+    obtenerMontoIngresosUsuario() ;
 }
-
 
 const init = () => {
 
@@ -426,12 +494,14 @@ const init = () => {
 
     btnAddIncome.onclick = () => {
 
+        addIncomeForm.classList.add("hidden") ;
         agregarIngreso() ;
 
     } ;
 
     btnAddExpense.onclick = () => {
 
+        addExpenseForm.classList.add("hidden") ;
         agregarGasto() ;
     
     } ;
@@ -450,15 +520,18 @@ const init = () => {
 
     } ;
 
-    btnLogout.onclick = async () => {
+    panelExpenses.onclick = () => {
 
-        await logout() ;
+        window.location.href = "/menu/expenses" ;
 
     } ;
 
+    panelIncomes.onclick = () => {
+
+        window.location.href = "/menu/incomes" ;
+
+    }
+
 }
-
-
-  
 
 init() ;

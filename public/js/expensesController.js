@@ -42,7 +42,14 @@ function obtenerGastos() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 } ;
@@ -82,35 +89,73 @@ function obtenerCategoriasUsuario() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 
 }
 
 function renderExpenses() {
     expensesTableBody.innerHTML = '';
+
+    const isMobile = window.innerWidth < 768;
+
     expenses.forEach(expense => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="py-2">${expense.title}</td>
-            <td class="py-2">${expense.category.name}</td>
-            <td class="py-2">${expense.note}</td>
-            <td class="text-right py-2">$${expense.amount.toFixed(2)}</td>
-        `;
+        
+        if(!expense.note)
+            expense.note = "Sin Nota" ;
+
+        if (isMobile) {
+            row.innerHTML = `
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 text-center">${expense.title}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-center"><span class="px-1 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">${expense.category.name}</span></td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium text-center">$${expense.amount.toFixed(2)}</td>
+                <td class="sm:table-cell px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 text-center">${expense.note}</td>
+            `;
+        } else {
+            row.innerHTML = `
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 text-center">${expense.title}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-center"><span class="px-1 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">${expense.category.name}</span></td>
+                <td class="sm:table-cell px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 text-center">${expense.note}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium text-center">$${expense.amount.toFixed(2)}</td>
+            `;
+        }
+
         expensesTableBody.appendChild(row);
     });
 }
 
 function renderFilteredExpenses() {
     expensesTableBody.innerHTML = '';
+
+    const isMobile = window.innerWidth < 768;
+
     filteredExpenses.forEach(expense => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="py-2">${expense.title}</td>
-            <td class="py-2">${expense.category.name}</td>
-            <td class="py-2">${expense.note}</td>
-            <td class="text-right py-2">$${expense.amount.toFixed(2)}</td>
-        `;
+
+        if (isMobile) {
+            row.innerHTML = `
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 text-center">${expense.title}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-center"><span class="px-1 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">${expense.category.name}</span></td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium text-center">$${expense.amount.toFixed(2)}</td>
+                <td class="sm:table-cell px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 text-center">${expense.note}</td>
+            `;
+        } else {
+            row.innerHTML = `
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 text-center">${expense.title}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-center"><span class="px-1 sm:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">${expense.category.name}</span></td>
+                <td class="sm:table-cell px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 text-center">${expense.note}</td>
+                <td class="px-2 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium text-center">$${expense.amount.toFixed(2)}</td>
+            `;
+        }
+
         expensesTableBody.appendChild(row);
     });
 }
@@ -181,3 +226,11 @@ const init = () => {
 } ;
 
 init() ;
+
+window.addEventListener('resize', () => {
+    if(!filter) {
+        renderExpenses() ;
+    } else {
+        renderFilteredExpenses() ;
+    }
+});

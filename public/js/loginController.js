@@ -23,7 +23,14 @@ function login() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 }
 

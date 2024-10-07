@@ -17,7 +17,7 @@ export default class Expense {
     @Column({name: "title", nullable: false})
     title : string ;
 
-    @Column({name: "note", nullable: false})
+    @Column({name: "note", nullable: true})
     note : string ;
 
     @ManyToOne(() => Category)

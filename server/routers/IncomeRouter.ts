@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyWithTokenAccess } from "../utils/Authorization";
-import { GETgetIncomesAmount, POSTaddIncome } from "../controllers/IncomeController";
+import { GETgetIncomesAmount, POSTaddIncome, GETgetIncomes } from "../controllers/IncomeController";
 
 const incomeRouter = Router() ;
 
@@ -10,6 +10,10 @@ incomeRouter.use((req, res, next) => {
     } else {
         res.redirect("/loginfirst") ;
     }
+}) ;
+
+incomeRouter.get("", async (req, res) => {
+    await GETgetIncomes(req, res) ;
 }) ;
 
 incomeRouter.get("/amount", async (req, res) => {

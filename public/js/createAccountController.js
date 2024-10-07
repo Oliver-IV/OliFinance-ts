@@ -22,7 +22,15 @@ function login() {
         }
     ).then(response => {
         if(response.ok) {
-            Swal.fire("Cuenta Creada", "¡Se ha creado tu cuenta con exito!", "success").then(response =>{
+            Swal.fire({
+                title: "¡Cuenta creada!",
+                text: "Se ha creado tu cuenta con éxito",
+                icon: "success",
+                confirmButtonText: "OK",
+                customClass: {
+                    confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+                }
+            }).then(response =>{
                 window.location.href = "/" ;
             }) ;
         } else {
@@ -31,7 +39,14 @@ function login() {
             });
         }
     }).catch(err => {
-        Swal.fire("Error", err.message, "error") ;
+        Swal.fire({
+            title: "Error",
+            text: err.message,
+            icon: "error",
+            customClass: {
+                confirmButton: 'bg-blue-600 text-white border border-blue-600 hover:bg-blue-700'
+            }
+        });
     }) ;
 }
 

@@ -55,14 +55,16 @@ export default class Converter implements IConverter {
     incomeDtoToEntity(dto:IncomeDTO) : Income {
         return new Income(
             dto.date,
-            dto.amount
+            dto.amount,
+            dto.title
         ) ;
     }
 
     incomeEntityToDto(entity:Income) : IncomeDTO {
         return new IncomeDTO(
             entity.amount,
-            entity.date
+            entity.date,
+            entity.title
         ) ;
     }
 
